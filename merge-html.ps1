@@ -1,5 +1,5 @@
 # merge-html.ps1
-# Smart HTML merge: only merge conflicting blocks, not full file
+# Insert only conflicting lines directly after the changed line
 
 param (
     $base = $args[0],
@@ -7,21 +7,39 @@ param (
     $theirs = $args[2]
 )
 
-# Load the two versions
 $oursLines   = Get-Content $ours
 $theirsLines = Get-Content $theirs
 
-# Detect conflict block (changes only)
-# Find lines that are DIFFERENT between ours and theirs
-$diffLines = Compare-Object -ReferenceObject $oursLines -DifferenceObject $theirsLines |
-        Where-Object { $_.SideIndicator -eq "=>" } |     # only pick incoming changes
-ForEach-Object { $_.InputObject }
+# Use Compare-Object to find line-by-line differences
+$diff = Compare-Object -ReferenceObject $oursLines -DifferenceObject $theirsLines -IncludeEqual
 
-# Create the final merged output:
-# 1. Keep all the lines from ours (main branch)
-# 2. Append only the conflict lines from theirs
-$merged = $oursLines + $diffLines
+$final = New-Object System.Collections.Generic.List[string]
 
-# Write back into final file
-$merged | Set-Content $ours
+for ($i = 0; $i -lt $diff.Count; $i++) {
+
+    $item = $diff[$i]
+
+    if ($item.SideIndicator -eq "==") {
+        # identical line → keep it
+        $final.Add($item.InputObject)
+    }
+    elseif ($item.SideIndicator -eq "<=") {
+        # ours line
+        $final.Add($item.InputObject)
+
+        # check if next line is a modification from theirs
+        if ($i + 1 -lt $diff.Count -and $diff[$i + 1].SideIndicator -eq "=>") {
+            # insert their changed line AFTER ours
+            $final.Add($diff[$i + 1].InputObject)
+            $i++  # skip the next diff since we already handled it
+        }
+    }
+    elseif ($item.SideIndicator -eq "=>") {
+        # theirs line (added only if not part of pair)
+        $final.Add($item.InputObject)
+    }
+}
+
+# Write merged output back into the file Git expects
+$final | Set-Content $ours
 exit 0
