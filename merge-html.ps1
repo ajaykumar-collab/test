@@ -1,6 +1,5 @@
 # merge-html.ps1
-# Insert only conflicting lines directly after the changed line
-
+# Insert the conflicting lines exactly after their position in ours
 param (
     $base = $args[0],
     $ours = $args[1],
@@ -10,36 +9,37 @@ param (
 $oursLines   = Get-Content $ours
 $theirsLines = Get-Content $theirs
 
-# Use Compare-Object to find line-by-line differences
-$diff = Compare-Object -ReferenceObject $oursLines -DifferenceObject $theirsLines -IncludeEqual
-
 $final = New-Object System.Collections.Generic.List[string]
 
-for ($i = 0; $i -lt $diff.Count; $i++) {
+# Use Compare-Object to detect differences
+$diff = Compare-Object $oursLines $theirsLines -IncludeEqual -SyncWindow 0
 
-    $item = $diff[$i]
+$index = 0
+
+while ($index -lt $diff.Count) {
+    $item = $diff[$index]
 
     if ($item.SideIndicator -eq "==") {
         # identical line → keep it
         $final.Add($item.InputObject)
     }
     elseif ($item.SideIndicator -eq "<=") {
-        # ours line
+        # ours line: ALWAYS add it
         $final.Add($item.InputObject)
 
-        # check if next line is a modification from theirs
-        if ($i + 1 -lt $diff.Count -and $diff[$i + 1].SideIndicator -eq "=>") {
-            # insert their changed line AFTER ours
-            $final.Add($diff[$i + 1].InputObject)
-            $i++  # skip the next diff since we already handled it
+        # If next diff entry is theirs, place it RIGHT AFTER ours
+        if ($index + 1 -lt $diff.Count -and $diff[$index + 1].SideIndicator -eq "=>") {
+            $final.Add($diff[$index + 1].InputObject)
+            $index++
         }
     }
     elseif ($item.SideIndicator -eq "=>") {
-        # theirs line (added only if not part of pair)
+        # theirs lone line (new line not in ours)
+        # insert where it belongs
         $final.Add($item.InputObject)
     }
+    $index++
 }
 
-# Write merged output back into the file Git expects
 $final | Set-Content $ours
 exit 0
