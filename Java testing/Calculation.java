@@ -4,6 +4,7 @@ public class Calculation {
         for (int i = 1; i <= n; i++) {
             sum += i;
         }
+        System.out.println(sum);
         return sum;
     }
     public static int product(int n) {
@@ -11,6 +12,7 @@ public class Calculation {
         for (int i = 1; i <= n; i++) {
             product *= i;
         }
+        System.out.println(product);
         return product;
     }
 }
