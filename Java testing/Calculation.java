@@ -25,4 +25,8 @@ public class Calculation {
     public static int subtract(int a, int b) {
         return a - b;
     }
+
+    public static double calculateTotal(int amount,int tax){
+        return Math.round(amount*((1+tax)/100.0));
+    }
 }
