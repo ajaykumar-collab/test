@@ -16,4 +16,8 @@ public class Calculation {
         System.out.println("Product of 1 to " + n + " is " + product);
         return product;
     }
+
+    public static double division(int num1, int num2) {
+        return (double) num1 / num2;
+    }
 }
