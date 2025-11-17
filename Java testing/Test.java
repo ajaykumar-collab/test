@@ -8,6 +8,6 @@ public class Test {
         int productRange = 10;
         System.out.println("Product of 1 to 10 is " + Calculation.product(productRange));
 
-        System.out.println("Multiplication of two numbers 5 and 10 is " + Calculation.multiply(5, 10));
+        System.out.println("Subtraction of two numbers 5 and 10 is " + Calculation.subtract(10, 5));
     }
 }

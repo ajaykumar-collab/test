@@ -15,7 +15,7 @@ public class Calculation {
         System.out.println( "Product of 1 to " + n + " is " + product);
         return product;
     }
-    public static int multiply(int a, int b) {
-        return a * b;
+    public static int subtract(int a, int b) {
+        return a - b;
     }
 }
