@@ -7,5 +7,7 @@ public class Test {
         // Calculate the product of numbers from 1 to 10
         int productRange = 10;
         System.out.println("Product of 1 to 10 is " + Calculation.product(productRange));
+
+        System.out.println("Multiplication of two numbers 5 and 10 is " + Calculation.multiply(5, 10));
     }
 }
