@@ -9,5 +9,6 @@ public class Test {
         System.out.println("Product of 1 to 10 is " + Calculation.product(productRange));
 
         System.out.println("Division of 10 by 2 is " + Calculation.division(10, 2));
+        System.out.println("Subtraction of two numbers 10 and 5 is " + Calculation.subtract(10, 5));
     }
 }
