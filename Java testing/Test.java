@@ -2,12 +2,12 @@ public class Test
 {
     public static void main(String[] args)
 	{
-        int result=0;
+        int sum =0;
         for(int i=1;i<=100;i++)
         {
-            result+=i;
+            sum +=i;
         }
-        System.out.println("Sum of 1 to 100 is "+result);
+        System.out.println("Sum of 1 to 100 is "+ sum);
 
 	}
 }
