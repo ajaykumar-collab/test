@@ -26,7 +26,7 @@ public class Calculation {
         return a - b;
     }
 
-    public static double calculateTotal(int amount,int tax){
-        return Math.round(amount*((1+tax)/100.0));
+    public static double calculateTotal(int amount, int tax) {
+        return amount + (amount * tax / 100.0);
     }
 }
