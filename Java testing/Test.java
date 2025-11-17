@@ -10,5 +10,7 @@ public class Test {
 
         System.out.println("Division of 10 by 2 is " + Calculation.division(10, 2));
         System.out.println("Subtraction of two numbers 10 and 5 is " + Calculation.subtract(10, 5));
+
+        System.out.println("Amount "+Calculation.calculateTotal(100,5));
     }
 }
