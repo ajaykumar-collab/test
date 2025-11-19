@@ -1,11 +1,6 @@
 @echo off
-REM Windows wrapper for git hook
-SETLOCAL ENABLEDELAYEDEXPANSION
-
-REM directory of this script (Git hook directory)
 set HOOK_DIR=%~dp0
 
-REM run PowerShell script with bypass policy
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Invoke-Expression (Get-Content '%HOOK_DIR%post-merge.ps1' -Raw)"
 
 exit /b 0
